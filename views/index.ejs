@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Accueil</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <% if (user) { %>
+            <h1>Bienvenue, <%= user.username %></h1>
+            <a href="/logout" class="btn">Se déconnecter</a>
+        <% } else { %>
+
+            
+                <input type="text" id="search" placeholder="Rechercher des utilisateurs...">
+    
+                <div id="search-results">
+                    <!-- Les résultats de recherche seront affichés ici -->
+                </div>
+           
+        
+
+            <h1>Bienvenue visiteur</h1>
+            <div class="forms">
+                <div class="form-container">
+                    <h2>Se connecter</h2>
+                    <form action="/login" method="POST">
+                        <label for="login-username">Nom d'utilisateur:</label>
+                        <input type="text" id="login-username" name="username" required>
+                        <label for="login-password">Mot de passe:</label>
+                        <input type="password" id="login-password" name="password" required>
+                        <button type="submit" class="btn">Se connecter</button>
+                    </form>
+                </div>
+                <div class="form-container">
+                    <h2>S'inscrire</h2>
+                    <form action="/register" method="POST">
+                        <label for="register-username">Nom d'utilisateur:</label>
+                        <input type="text" id="register-username" name="username" required>
+                        <label for="register-email">Email:</label>
+                        <input type="email" id="register-email" name="email" required>
+                        <label for="register-password">Mot de passe:</label>
+                        <input type="password" id="register-password" name="password" required>
+                        <label for="register-gender">Genre:</label>
+                        <select id="register-gender" name="gender" required>
+                            <option value="m">Homme</option>
+                            <option value="f">Femme</option>
+                        </select>
+                        <button type="submit" class="btn">S'inscrire</button>
+                    </form>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+
+
+    <script>
+        document.getElementById('search').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = ''; // Clear previous results
+
+            // Liste des utilisateurs
+            const users = <%- JSON.stringify(users) %>;
+
+            if (query.length > 0) {
+                users.forEach(user => {
+                    if (user.username.toLowerCase().includes(query)) {
+                        // Créer une boîte de résultat avec uniquement le pseudo
+                        const resultBox = document.createElement('div');
+                        resultBox.classList.add('result-box');
+                        resultBox.innerHTML = `<h2><a href="/profile/${user.username}">${user.username}</a></h2>`;
+                        searchResults.appendChild(resultBox);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

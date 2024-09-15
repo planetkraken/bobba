@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paramètres</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Paramètres du Compte</h1>
+        <form action="/update-settings" method="POST">
+            <label for="email">Nouvel Email:</label>
+            <input type="email" id="email" name="email">
+            <label for="password">Nouveau Mot de Passe:</label>
+            <input type="password" id="password" name="password">
+            <button type="submit" class="btn">Mettre à jour</button>
+        </form>
+
+        <form>
+            <div class="tags-container" id="tags-container">
+                <% if (tags && tags.length > 0) { %>
+                    <% tags.forEach(tag => { %>
+                        <div class="tag" data-tag="<%= tag %>"><%= tag %></div>
+                    <% }); %>
+                <% } else { %>
+                    <p>Aucun tag pour le moment.</p>
+                <% } %>
+            </div>
+        
+            <div class="input-group">
+                <input type="text" id="tag-input" placeholder="Ajouter un tag...">
+                <button type="button" id="add-tag">Ajouter</button>
+            </div>
+        </form>
+        
+    </div>
+
+    <script>
+        const tagInput = document.getElementById('tag-input');
+        const tagsContainer = document.getElementById('tags-container');
+        const addTagButton = document.getElementById('add-tag');
+    
+        // Fonction pour ajouter un tag visuellement
+        function addTagElement(tag) {
+            const tagDiv = document.createElement('div');
+            tagDiv.className = 'tag';
+            tagDiv.dataset.tag = tag;
+            tagDiv.textContent = tag;
+            tagsContainer.appendChild(tagDiv);
+    
+            // Event pour supprimer un tag
+            tagDiv.addEventListener('click', () => {
+                removeTag(tagDiv);
+            });
+        }
+    
+        // Fonction pour envoyer le tag au serveur via AJAX
+        function addTagToServer(tag) {
+            fetch('/add-tag', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tag: tag })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addTagElement(tag);
+                } else {
+                    alert('Erreur lors de l\'ajout du tag');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        }
+    
+        // Fonction pour supprimer un tag (visuellement + serveur)
+        function removeTag(tagElement) {
+            const tag = tagElement.dataset.tag;
+            fetch('/remove-tag', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tag: tag })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    tagElement.remove();
+                } else {
+                    alert('Erreur lors de la suppression du tag');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        }
+    
+        // Événement pour ajouter un tag quand on clique sur "Ajouter"
+        addTagButton.addEventListener('click', () => {
+            const tag = tagInput.value.trim();
+            if (tag) {
+                addTagToServer(tag);
+                tagInput.value = '';
+            }
+        });
+    
+        // Ajouter la fonctionnalité de suppression à tous les tags existants
+        document.querySelectorAll('.tag').forEach(tagElement => {
+            tagElement.addEventListener('click', () => {
+                removeTag(tagElement);
+            });
+        });
+    </script>
+</body>
+</html>

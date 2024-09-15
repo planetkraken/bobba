@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gestion du Personnel</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+      
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <% if (user) { %>
+                <h1>Bienvenue, <%= user.username %></h1>
+                <a href="/logout" class="btn">Se déconnecter</a>
+            <% } else { %>
+                <h1>Bienvenue visiteur</h1>
+            <% } %>
+        </div>
+
+        <input type="text" id="search" placeholder="Rechercher des utilisateurs...">
+        <div class="search-results" id="search-results"></div>
+            <!-- Les résultats de recherche seront affichés ici -->
+        </div>
+
+        <h2>Gestion des Utilisateurs</h2>
+        <div class="user-list" id="user-list">
+            <% users.forEach(user => { %>
+                <div class="user-box">
+                    <a href="/profile/<%= user.username %>">
+                        <h2><%= user.username %></h2>
+                        <% if (user.grade_id >= 2) { %>
+                            <p>Grade: <%= user.grade_name %></p>
+                        <% } %>
+                    </a>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('search').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = ''; // Clear previous results
+
+            if (query.length > 0) {
+                const userBoxes = document.querySelectorAll('.user-box');
+                userBoxes.forEach(box => {
+                    const username = box.querySelector('h2').textContent.toLowerCase();
+                    if (username.includes(query)) {
+                        // Create a result box with only the username
+                        const resultBox = document.createElement('div');
+                        resultBox.classList.add('result-box');
+                        resultBox.innerHTML = `<h2><a href="/profile/${username}">${username}</a></h2>`;
+                        searchResults.appendChild(resultBox);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

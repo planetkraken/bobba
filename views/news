@@ -1,0 +1,222 @@
+<div class="news-container">
+    <div class="sidebar">
+        <h2 class="sidebar-title">Articles</h2>
+        <ul class="article-list">
+            <% articles.forEach(article => { %>
+                <li class="article-list-item">
+                    <a href="/news/<%= article.id %>" class="article-list-link"><%= article.title %></a>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <% if (article) { %>
+            <div class="article-header">
+                <h1 class="article-title"><%= article.title %></h1>
+                <p class="article-date">Publié le <%= new Date(article.created_at).toLocaleDateString() %></p>
+            </div>
+            <div class="article-body">
+                <p><%= article.content %></p>
+            </div>
+
+            <!-- Section des réactions (visible si connecté) -->
+            <% if (user) { %>
+                <div class="reactions">
+                    <form action="/news/<%= article.id %>/reaction" method="post">
+                        <button name="reaction" value="heart" class="reaction-btn" style="background-color: <%= userReaction === 'heart' ? '#ff9999' : '#e0e0e0' %>">❤️</button>
+                        <button name="reaction" value="laugh" class="reaction-btn" style="background-color: <%= userReaction === 'laugh' ? '#ff9999' : '#e0e0e0' %>">😂</button>
+                        <button name="reaction" value="wow" class="reaction-btn" style="background-color: <%= userReaction === 'wow' ? '#ff9999' : '#e0e0e0' %>">😮</button>
+                    </form>
+                </div>
+
+                <!-- Section des commentaires (visible si connecté) -->
+                <div class="comments-section">
+                    <h3 class="comments-title">Commentaires</h3>
+                    <ul class="comments-list">
+                        <% comments.forEach(comment => { %>
+                            <li class="comment-item">
+                                <div class="comment-author"><%= comment.username %> :</div>
+                                <div class="comment-content"><%= comment.content %></div>
+                                <% if (user && comment.user_id === user.id) { %>
+                                    <form action="/delete-comment/<%= comment.id %>" method="post" class="delete-comment-form">
+                                        <button type="submit" class="delete-comment-btn">🗑️</button>
+                                    </form>
+                                <% } %>
+                            </li>
+                        <% }); %>
+                    </ul>
+
+                    <form action="/news/<%= article.id %>/comment" method="post" class="comment-form">
+                        <textarea name="content" placeholder="Ajouter un commentaire"></textarea>
+                        <button type="submit" class="comment-submit-btn">Commenter</button>
+                    </form>
+                </div>
+            <% } else { %>
+                <p>Connectez-vous pour réagir ou commenter cet article.</p>
+            <% } %>
+        <% } else { %>
+            <p>Sélectionnez un article pour voir son contenu.</p>
+        <% } %>
+    </div>
+</div>
+
+<!-- Styles CSS -->
+<style>
+    .news-container {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
+
+    .sidebar {
+        width: 30%;
+        background-color: #4A90E2;
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-title {
+        margin-top: 0;
+        font-size: 1.5em;
+    }
+
+    .article-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .article-list-item {
+        margin-bottom: 10px;
+    }
+
+    .article-list-link {
+        color: #fff;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s, color 0.3s;
+        background-color: #357ABD;
+    }
+
+    .article-list-link:hover {
+        background-color: #2a6a9d;
+        color: #e0e0e0;
+    }
+
+    .main-content {
+        width: 70%;
+    }
+
+    .article-header {
+        margin-bottom: 20px;
+    }
+
+    .article-title {
+        font-size: 2em;
+        margin: 0;
+    }
+
+    .article-date {
+        font-size: 0.9em;
+        color: #777;
+    }
+
+    .article-body {
+        font-size: 1.1em;
+        line-height: 1.6;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .reactions {
+        margin-top: 20px;
+    }
+
+    .reaction-btn {
+        font-size: 16px;
+        padding: 5px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-right: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .comments-section {
+        margin-top: 20px;
+    }
+
+    .comments-title {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+
+    .comments-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .comment-item {
+        background-color: #fff;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .comment-author {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .comment-content {
+        flex-grow: 1;
+    }
+
+    .delete-comment-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        color: #e74c3c;
+    }
+
+    .comment-form {
+        margin-top: 20px;
+    }
+
+    .comment-form textarea {
+        width: calc(100% - 22px);
+        height: 80px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 1em;
+    }
+
+    .comment-submit-btn {
+        background-color: #4A90E2;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s;
+    }
+
+    .comment-submit-btn:hover {
+        background-color: #357ABD;
+    }
+</style>

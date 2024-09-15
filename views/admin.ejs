@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Include Trumbowyg CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2.25.1/dist/ui/trumbowyg.min.css">
+
+<!-- Optionally include Trumbowyg plugins CSS (if any) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2.25.1/dist/plugins/colors/ui/trumbowyg.colors.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/giphy/ui/trumbowyg.giphy.min.css" integrity="sha512-etV8uMtWItbQlbmJsuSczwcQj/qVSIgksGsUmja2E44S06IAlhdpQeOPMHAbpDdLPphtVLg78qS2iFxlBlKygA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/emoji/ui/trumbowyg.emoji.min.css" integrity="sha512-2RIZab3prIyPesUHpOb8YBlL441Q/sDqNK4v+3+LEjJyEg52kXRD/GGMuW+OXG5hCSBe9gTYNal51fdoQ0WiPA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/colors/ui/trumbowyg.colors.min.css" integrity="sha512-vw0LMar38zTSJghtmUo0uw000TBbzhsxLZkOgXZG+U4GYEQn+c+FmVf7glhSZUQydrim3pI+/m7sTxAsKhObFA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="admin-container"></div>
+    <h1>Créer un article</h1>
+
+    <form action="/admin/add-article" method="post">
+        <label for="title">Titre :</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="editor">Contenu :</label>
+        <!-- This textarea will be replaced by the Trumbowyg editor -->
+        <textarea id="editor" name="content" rows="10" required></textarea>
+
+        <button type="submit">Publier</button>
+    </form>
+</div>
+
+<!-- Styles CSS -->
+<style>
+    .admin-container {
+        width: 50%;
+        margin: 0 auto;
+    }
+    .admin-container form {
+        display: flex;
+        flex-direction: column;
+    }
+    .admin-container input, .admin-container textarea {
+        margin-bottom: 10px;
+        padding: 8px;
+        font-size: 16px;
+    }
+    .admin-container button {
+        padding: 10px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+<!-- Include jQuery (required for Trumbowyg) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Trumbowyg JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/trumbowyg.min.js"></script>
+
+<!-- Optionally include Trumbowyg plugins (if any) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/colors/trumbowyg.colors.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/emoji/trumbowyg.emoji.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/giphy/trumbowyg.giphy.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/langs/fr.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#editor').trumbowyg({
+            lang: 'fr', // Définit la langue en français
+            btns: [
+                ['viewHTML'],
+                ['formatting'],
+                ['foreColor', 'backColor'], // Plugin de couleurs
+                ['emoji'],                  // Plugin emoji
+                ['giphy'],                  // Plugin Giphy pour les GIFs
+                ['strong', 'em', 'del'],
+                ['link'],
+                ['insertImage'],
+                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                ['unorderedList', 'orderedList'],
+                ['horizontalRule'],
+                ['removeformat'],
+                ['fullscreen']
+            ],
+            plugins: {
+                // Configuration du plugin Giphy
+                giphy: {
+                    apiKey: 'jtDrnADtMdYayCkbC2G7xeDirl5y9Cbl', // Remplacez par votre clé API Giphy
+                    resultLimit: 10,
+                    rating: 'g'
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+

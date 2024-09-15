@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profil de <%= user.username %></title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .profile-box {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-box h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .profile-box p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .tag-label {
+        display: inline-block;
+        background-color: #007BFF;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        margin-right: 5px;
+        font-size: 14px;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-box">
+            <h2>Profil de <%= user.username %></h2>
+            <p>Email: <%= user.email %></p>
+            <p>Genre: <%= user.gender === 'm' ? 'Homme' : 'Femme' %></p>
+            <% if (user.grade_id >= 2) { %>
+                <p>Grade: <%= user.grade_name %></p>
+            <% } %>
+        </div>
+
+        <div class="tags-container">
+            <h3>Tags :</h3>
+            <% if (tags && tags.length > 0) { %>
+                <% tags.forEach(tag => { %>
+                    <span class="tag-label"><%= tag %></span>
+                <% }); %>
+            <% } else { %>
+                <p>Aucun tag associé</p>
+            <% } %>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
