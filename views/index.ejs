@@ -6,18 +6,20 @@
 </head>
 <body>
     <div class="container">
+
+        <input type="text" id="search" placeholder="Rechercher des utilisateurs...">
+    
+        <div id="search-results">
+            <!-- Les résultats de recherche seront affichés ici -->
+        </div>
+        
         <% if (user) { %>
             <h1>Bienvenue, <%= user.username %></h1>
             <a href="/logout" class="btn">Se déconnecter</a>
         <% } else { %>
 
             
-                <input type="text" id="search" placeholder="Rechercher des utilisateurs...">
-    
-                <div id="search-results">
-                    <!-- Les résultats de recherche seront affichés ici -->
-                </div>
-           
+                       
         
 
             <h1>Bienvenue visiteur</h1>
